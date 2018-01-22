@@ -17,7 +17,9 @@ class MessUp extends Component {
 
   componentDidMount() {
     var date = new Date(Date.now())
+    console.log(date);
     this.setState({date});
+    this.getTasks()
     setInterval(this.getTasks.bind(this), 2000)
   }
 
@@ -39,7 +41,7 @@ class MessUp extends Component {
 
           this.setState({date});
           if (this.state.fuckup === false) {
-            
+
             this.props.changeStyle();
             this.setState({fuckup: true});
           }
@@ -102,7 +104,10 @@ class MessUp extends Component {
 
   render() {
     return (
-      <TimeAgo date={this.state.date}/>
+      <div>
+        <p>last fuck up was</p>
+        <TimeAgo date={this.state.date}/>
+      </div>
     )
   }
 }
@@ -111,23 +116,27 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      style: "Happy"
+      style: "Happy",
+      face: ":)"
     };
   }
 
   changeStyle() {
     if (this.state.style === "Happy") {
       this.setState({style: "Sad"});
+      this.setState({face: ":("});
     }
     else {
       this.setState({style: "Happy"});
+      this.setState({face: ":)"});
     }
   }
 
   render() {
     return (
       <div className={this.state.style}>
-        <MessUp changeStyle={this.changeStyle.bind(this)}/>
+        <MessUp className="WhiteText" changeStyle={this.changeStyle.bind(this)}/>
+        <p className="WhiteText">{this.state.face}</p>
       </div>
     );
   }
