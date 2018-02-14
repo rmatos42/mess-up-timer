@@ -36,7 +36,7 @@ class MessUp extends Component {
         }
         else
           this.setState({fuckup: false});
-        fetch('http://10.0.0.117:3001/tasks')
+        fetch('http://127.0.0.1:3001/dates')
           .then((response) => response.json())
           .then((responseJson) => {
               console.log(responseJson[0].date);
@@ -66,7 +66,7 @@ class MessUp extends Component {
           console.log(responseJson);
 
               this.setState({date});
-              fetch('http://10.0.0.117:3001/tasks', {
+              fetch('http://127.0.0.1:3001/dates', {
                 method: 'POST',
                 headers : {
                   Accept: 'application/json',
@@ -86,7 +86,17 @@ class MessUp extends Component {
           }
         } else{
           if (responseJson.data.length === 0 && responseJson.data.length !== this.state.data.length) {
-
+            this.setState({date});
+            fetch('http://127.0.0.1:3001/dates', {
+              method: 'POST',
+              headers : {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+              },
+              body:JSON.stringify({date: date.toString()})
+          }).then((res) => res.json())
+          .then((data) =>  console.log(data))
+          .catch((err)=>console.log(err))
           this.setState({data: responseJson.data});
             this.props.changeStyle();
             this.setState({fuckup: false});
@@ -102,7 +112,7 @@ class MessUp extends Component {
   render() {
       return (
         <div>
-          <p>last fuck up was</p>
+          <p>last {this.props.text} was</p>
           <Sound url={require('./silent.mp3')} playStatus={this.state.playing}/>
           <TimeAgo datetime={this.state.date} />
         </div>
@@ -137,7 +147,7 @@ class App extends Component {
   render() {
     return (
       <div className={this.state.style}>
-        <MessUp className="WhiteText" changeStyle={this.changeStyle.bind(this)}/>
+        <MessUp text="mess up" className="WhiteText" changeStyle={this.changeStyle.bind(this)}/>
         <p className="WhiteText">{this.state.face}</p>
       </div>
     );
